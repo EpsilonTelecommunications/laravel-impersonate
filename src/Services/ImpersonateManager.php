@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Application;
 use Lab404\Impersonate\Events\LeaveImpersonation;
 use Lab404\Impersonate\Events\TakeImpersonation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ImpersonateManager
 {
@@ -30,14 +31,15 @@ class ImpersonateManager
      */
     public function findUserById($id)
     {
-        $model = $this->app['config']->get('auth.providers.users.model');
-
-        $user = call_user_func([
-            $model,
-            'findOrFail'
-        ], $id);
-
-        return $user;
+        $user = $this->app['auth']->getProvider()->retrieveById($id)
+        
+        if ($user) {
+            return $user;
+        }
+        
+        throw (new ModelNotFoundException)->setModel(
+            'Authenticatable Model', $id
+        );
     }
 
     /**
