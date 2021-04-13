@@ -15,7 +15,7 @@ class BladeDirectivesTest extends TestCase
     /** @var  string */
     protected $view;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -10,7 +10,7 @@ class ImpersonateManagerTest extends TestCase
     /** @var  ImpersonateManager */
     protected $manager;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
