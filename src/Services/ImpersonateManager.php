@@ -77,7 +77,7 @@ class ImpersonateManager
             return false;
         }
 
-        $this->app['events']->fire(new TakeImpersonation($from, $to));
+        $this->app['events']->dispatch(new TakeImpersonation($from, $to));
 
         return true;
     }
@@ -101,7 +101,7 @@ class ImpersonateManager
             return false;
         }
 
-        $this->app['events']->fire(new LeaveImpersonation($impersonator, $impersonated));
+        $this->app['events']->dispatch(new LeaveImpersonation($impersonator, $impersonated));
 
         return true;
     }
