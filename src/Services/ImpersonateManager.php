@@ -2,7 +2,7 @@
 
 namespace Lab404\Impersonate\Services;
 
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Illuminate\Foundation\Application;
 use Lab404\Impersonate\Events\LeaveImpersonation;
 use Lab404\Impersonate\Events\TakeImpersonation;
@@ -11,25 +11,18 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class ImpersonateManager
 {
-    /**
-     * @var Application
-     */
+    /** @var Application $app */
     private $app;
 
-    /**
-     * UserFinder constructor.
-     *
-     * @param Application $app
-     */
     public function __construct(Application $app)
     {
         $this->app = $app;
     }
 
     /**
-     * @param   int $id
-     * @return  Model
-     */
+     * @param  int  $id
+     * @return Authenticatable
+ */
     public function findUserById($id)
     {
         $user = $this->app['auth']->getProvider()->retrieveById($id);
@@ -51,7 +44,6 @@ class ImpersonateManager
     }
 
     /**
-     * @param   void
      * @return  int|null
      */
     public function getImpersonatorId()
@@ -60,8 +52,8 @@ class ImpersonateManager
     }
 
     /**
-     * @param Model $from
-     * @param Model $to
+     * @param Authenticatable $from
+     * @param Authenticatable $to
      * @return bool
      */
     public function take($from, $to)
@@ -72,7 +64,7 @@ class ImpersonateManager
             $this->app['auth']->quietLogout();
             $this->app['auth']->quietLogin($to);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             unset($e);
             return false;
         }
@@ -82,10 +74,7 @@ class ImpersonateManager
         return true;
     }
 
-    /**
-     * @return  bool
-     */
-    public function leave()
+    public function leave(): bool
     {
         try {
             $impersonated = $this->app['auth']->user();
@@ -96,7 +85,7 @@ class ImpersonateManager
             
             $this->clear();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             unset($e);
             return false;
         }
@@ -114,18 +103,12 @@ class ImpersonateManager
         session()->forget($this->getSessionKey());
     }
 
-    /**
-     * @return string
-     */
-    public function getSessionKey()
+    public function getSessionKey(): string
     {
         return config('laravel-impersonate.session_key');
     }
 
-    /**
-     * @return  string
-     */
-    public function getTakeRedirectTo()
+    public function getTakeRedirectTo(): string
     {
         try {
             $uri = route(config('laravel-impersonate.take_redirect_to'));
@@ -136,10 +119,7 @@ class ImpersonateManager
         return $uri;
     }
 
-    /**
-     * @return  string
-     */
-    public function getLeaveRedirectTo()
+    public function getLeaveRedirectTo(): string
     {
         try {
             $uri = route(config('laravel-impersonate.leave_redirect_to'));

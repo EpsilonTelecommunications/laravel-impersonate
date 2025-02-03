@@ -56,7 +56,7 @@ class ImpersonateController extends Controller
         return redirect()->back();
     }
 
-    /*
+    /**
      * @return RedirectResponse
      */
     public function leave()

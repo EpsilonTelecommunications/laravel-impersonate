@@ -15,10 +15,10 @@ class LeaveImpersonation
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var  Authenticatable */
+    /** @var Authenticatable */
     public $impersonator;
 
-    /** @var  Authenticatable */
+    /** @var Authenticatable */
     public $impersonated;
 
     /**

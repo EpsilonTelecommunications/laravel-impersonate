@@ -12,16 +12,15 @@ class TestCase extends \Orchestra\Testbench\TestCase
      * @param   void
      * @return  void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->artisan('migrate', ['--database' => 'testbench']);
 
-        $this->loadMigrationsFrom([
-            '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__.'/../migrations'),
-        ]);
+        $this->loadMigrationsFrom(
+            realpath(__DIR__.'/../migrations')
+         );
 
         $this->setUpRoutes();
     }
@@ -51,7 +50,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            ConsoleServiceProvider::class,
             ImpersonateServiceProvider::class,
         ];
     }
